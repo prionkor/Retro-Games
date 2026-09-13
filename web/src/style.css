@@ -23,6 +23,8 @@ h1 {
 canvas {
   display: block;
   background: rgb(187, 187, 187);
-  image-rendering: pixelated;
   border: 2px solid black;
+  width: 320px;
+  height: 480px;
+  image-rendering: pixelated;
 }

@@ -1,38 +1,41 @@
 package racing
 
+import "github.com/prionkor/retro-games/engine"
+
 type Game struct {
-	Player Player
-	Track  Track
-	Score  int
+	Car   Car
+	Track Track
+	Score int
 }
 
 func NewGame() *Game {
 	return &Game{
-		Player: Player{
-			X:      0,
-			Y:      0,
-			Width:  50,
-			Height: 100,
-		},
-		Track: Track{
-			Left:  -100,
-			Right: 100,
-			Speed: 200,
-		},
+		Car:   *NewCar(11, 56),
+		Track: *NewTrack(0, 0, 60, 25),
 		Score: 0,
 	}
 }
 
-type Player struct {
-	X float64
-	Y float64
+func (g *Game) Render(f *engine.Frame) {
+	f.Clear()
 
-	Width  int
-	Height int
+	f.Draw(
+		g.Track.X,
+		g.Track.Y,
+		g.Track.Width,
+		g.Track.Height,
+		g.Track.Pixels,
+	)
+
+	f.Draw(
+		g.Car.X,
+		g.Car.Y,
+		g.Car.Width,
+		g.Car.Height,
+		g.Car.Pixels,
+	)
 }
 
-type Track struct {
-	Left  float64
-	Right float64
-	Speed float64
+func (g *Game) Update(dt float64) {
+	g.Track.Update(dt)
 }

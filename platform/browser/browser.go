@@ -60,4 +60,13 @@ func (b *BrowserPlatform) Present(width int, height int, pixels []bool) {
 	b.context.Call("putImageData", imageData, 0, 0)
 }
 
+func (b *BrowserPlatform) IsKeyDown(key string) bool {
+	keyState := js.Global().Get("keyState")
+	if keyState.IsUndefined() {
+		return false
+	}
+
+	return keyState.Get(key).Bool()
+}
+
 var _ platform.Platform = (*BrowserPlatform)(nil)

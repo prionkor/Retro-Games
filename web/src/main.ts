@@ -6,11 +6,15 @@ app.innerHTML = `
   <main>
     <h1>Retro Games</h1>
 
-    <canvas id="game" width="320" height="480"></canvas>
+    <canvas id="game" width="40" height="60"></canvas>
   </main>
 `;
 
 const go = new Go();
+
+const canvas = document.getElementById("game") as HTMLCanvasElement;
+const context = canvas.getContext("2d")!;
+context.imageSmoothingEnabled = false;
 
 declare global {
   var showMessage: (message: string) => void;

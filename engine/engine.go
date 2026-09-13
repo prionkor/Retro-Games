@@ -1,30 +1,35 @@
 package engine
 
 import (
-	"fmt"
-
 	"github.com/prionkor/retro-games/platform"
 )
 
 type Engine struct {
 	platform platform.Platform
 	Frame    Frame
+	game     Game
 
 	running   bool
 	lastFrame float64
 	hasFrame  bool
 }
 
-func NewEngine(platform platform.Platform) *Engine {
+type Game interface {
+	Render(*Frame)
+	Update(dt float64)
+}
+
+func NewEngine(platform platform.Platform, game Game) *Engine {
 	return &Engine{
 		platform: platform,
 		running:  false,
 		hasFrame: false,
+		game:     game,
 
 		Frame: Frame{
-			Width:  160,
-			Height: 240,
-			Pixels: make([]bool, 160*240),
+			Width:  40,
+			Height: 60,
+			Pixels: make([]bool, 40*60),
 		},
 	}
 }
@@ -52,10 +57,10 @@ func (e *Engine) frame(timestamp float64) {
 }
 
 func (e *Engine) Update(dt float64) {
-	fmt.Println("dt:", dt)
+	e.game.Update(dt)
 }
 
 func (e *Engine) Render() {
-	e.Frame.Pixels[100*e.Frame.Width+80] = true
+	e.game.Render(&e.Frame)
 	e.platform.Present(e.Frame.Width, e.Frame.Height, e.Frame.Pixels)
 }
