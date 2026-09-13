@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	p := &browser.BrowserPlatform{}
+	p := browser.NewBrowserPlatform()
 	e := engine.NewEngine(p)
 	p.Log("Hello from Go WebAssembly!")
 

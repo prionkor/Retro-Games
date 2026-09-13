@@ -7,7 +7,9 @@ import (
 )
 
 type Engine struct {
-	platform  platform.Platform
+	platform platform.Platform
+	Frame    Frame
+
 	running   bool
 	lastFrame float64
 	hasFrame  bool
@@ -18,6 +20,12 @@ func NewEngine(platform platform.Platform) *Engine {
 		platform: platform,
 		running:  false,
 		hasFrame: false,
+
+		Frame: Frame{
+			Width:  160,
+			Height: 240,
+			Pixels: make([]bool, 160*240),
+		},
 	}
 }
 
@@ -48,4 +56,6 @@ func (e *Engine) Update(dt float64) {
 }
 
 func (e *Engine) Render() {
+	e.Frame.Pixels[100*e.Frame.Width+80] = true
+	e.platform.Present(e.Frame.Width, e.Frame.Height, e.Frame.Pixels)
 }

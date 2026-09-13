@@ -7,7 +7,7 @@ body {
 body {
   display: flex;
   justify-content: center;
-  background: #111;
+  background: #999;
   font-family: monospace;
 }
 
@@ -17,12 +17,12 @@ main {
 }
 
 h1 {
-  color: white;
+  color: black;
 }
 
 canvas {
   display: block;
-  background: black;
+  background: rgb(187, 187, 187);
   image-rendering: pixelated;
-  border: 2px solid white;
+  border: 2px solid black;
 }
