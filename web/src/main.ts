@@ -6,7 +6,7 @@ app.innerHTML = `
   <main>
     <h1>Retro Games</h1>
 
-    <canvas id="game" width="40" height="60"></canvas>
+    <canvas id="game" width="281" height="421"></canvas>
   </main>
 `;
 

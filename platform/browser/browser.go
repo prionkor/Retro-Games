@@ -40,6 +40,8 @@ func (b *BrowserPlatform) RequestFrame(callback func(timestamp float64)) {
 	js.Global().Call("requestAnimationFrame", cb)
 }
 func (b *BrowserPlatform) Present(width int, height int, pixels []bool) {
+	pixels, width, height = expandPixels(width, height, pixels)
+
 	imageData := b.context.Call("createImageData", width, height)
 	data := imageData.Get("data")
 
@@ -58,6 +60,54 @@ func (b *BrowserPlatform) Present(width int, height int, pixels []bool) {
 	}
 
 	b.context.Call("putImageData", imageData, 0, 0)
+}
+
+func expandPixels(width int, height int, pixels []bool) (
+	[]bool,
+	int,
+	int,
+) {
+	physicalWidth := width*6 + (width - 1) + 2
+	physicalHeight := height*6 + (height - 1) + 2
+
+	expandedPixels := make([]bool, physicalWidth*physicalHeight)
+
+	pattern := []bool{
+		true, true, true, true, true, true,
+		true, false, false, false, false, true,
+		true, false, true, true, false, true,
+		true, false, true, true, false, true,
+		true, false, false, false, false, true,
+		true, true, true, true, true, true,
+	}
+
+	for i, pixel := range pixels {
+		if !pixel {
+			continue
+		}
+
+		x := i % width
+		y := i / width
+
+		cellX := 1 + x*7
+		cellY := 1 + y*7
+
+		for cy := 0; cy < 6; cy++ {
+			for cx := 0; cx < 6; cx++ {
+				patternIndex := cy*6 + cx
+
+				if !pattern[patternIndex] {
+					continue
+				}
+
+				index := (cellY+cy)*physicalWidth + (cellX + cx)
+
+				expandedPixels[index] = true
+			}
+		}
+	}
+
+	return expandedPixels, physicalWidth, physicalHeight
 }
 
 func (b *BrowserPlatform) IsKeyDown(key string) bool {

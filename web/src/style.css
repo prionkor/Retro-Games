@@ -24,7 +24,7 @@ canvas {
   display: block;
   background: rgb(187, 187, 187);
   border: 2px solid black;
-  width: 320px;
-  height: 480px;
+  width: 422px;
+  height: 632px;
   image-rendering: pixelated;
 }
