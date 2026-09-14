@@ -1,6 +1,9 @@
 package racing
 
-import "github.com/prionkor/retro-games/engine"
+import (
+	"github.com/prionkor/retro-games/engine"
+	"github.com/prionkor/retro-games/platform"
+)
 
 type Game struct {
 	Car   Car
@@ -22,8 +25,8 @@ func (g *Game) Render(f *engine.Frame) {
 	f.Draw(
 		g.Track.X,
 		g.Track.Y,
-		g.Track.Width,
-		g.Track.Height,
+		g.Track.Width(),
+		g.Track.Height(),
 		g.Track.Pixels,
 	)
 
@@ -36,6 +39,25 @@ func (g *Game) Render(f *engine.Frame) {
 	)
 }
 
-func (g *Game) Update(dt float64) {
+func (g *Game) Update(dt float64, input platform.Input) {
 	g.Track.Update(dt)
+
+	minX := g.Track.X + 1
+	maxX := g.Track.X + g.Track.Width() - 1 - g.Car.Width
+
+	if input.Left {
+		g.Car.MoveX(-3)
+
+		if g.Car.X < minX {
+			g.Car.X = minX
+		}
+	}
+
+	if input.Right {
+		g.Car.MoveX(3)
+
+		if g.Car.X > maxX {
+			g.Car.X = maxX
+		}
+	}
 }

@@ -6,4 +6,10 @@ type Platform interface {
 	Present(width int, height int, pixels []bool)
 
 	IsKeyDown(key string) bool
+	Input() Input
+}
+
+type Input struct {
+	Left  bool
+	Right bool
 }

@@ -3,8 +3,8 @@ package racing
 type Track struct {
 	X      int
 	Y      int
-	Height int
-	Width  int
+	height int
+	width  int
 
 	Pattern       []bool
 	PatternHeight int
@@ -30,8 +30,8 @@ func NewTrack(x, y, height, width int) *Track {
 	return &Track{
 		X:             x,
 		Y:             y,
-		Height:        height,
-		Width:         width,
+		height:        height,
+		width:         width,
 		Pattern:       pattern,
 		PatternHeight: patternHeight,
 		Pixels:        pixels,
@@ -43,18 +43,26 @@ func NewTrack(x, y, height, width int) *Track {
 func (t *Track) Update(dt float64) {
 	t.Offset += t.Speed * dt
 
-	for y := 0; y < t.Height; y++ {
+	for y := 0; y < t.height; y++ {
 		patternY := (y - int(t.Offset)) % t.PatternHeight
 
 		if patternY < 0 {
 			patternY += t.PatternHeight
 		}
 
-		for x := 0; x < t.Width; x++ {
-			patternIndex := patternY*t.Width + x
-			pixelIndex := y*t.Width + x
+		for x := 0; x < t.width; x++ {
+			patternIndex := patternY*t.width + x
+			pixelIndex := y*t.width + x
 
 			t.Pixels[pixelIndex] = t.Pattern[patternIndex]
 		}
 	}
+}
+
+func (t *Track) Height() int {
+	return t.height
+}
+
+func (t *Track) Width() int {
+	return t.width
 }

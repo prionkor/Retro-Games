@@ -7,8 +7,15 @@ import (
 )
 
 type BrowserPlatform struct {
-	canvas  js.Value
-	context js.Value
+	canvas   js.Value
+	context  js.Value
+	input    platform.Input
+	keyState map[string]bool
+}
+
+var supportedKeys = map[string]bool{
+	"ArrowLeft":  true,
+	"ArrowRight": true,
 }
 
 func NewBrowserPlatform() *BrowserPlatform {
@@ -17,11 +24,19 @@ func NewBrowserPlatform() *BrowserPlatform {
 		Call("getElementById", "game")
 
 	context := canvas.Call("getContext", "2d")
+	keyState := make(map[string]bool)
 
-	return &BrowserPlatform{
-		canvas:  canvas,
-		context: context,
+	
+
+	b := &BrowserPlatform{
+		canvas:   canvas,
+		context:  context,
+		keyState: keyState,
 	}
+
+	b.RegisterKeyboard()
+
+	return b
 }
 
 func (b *BrowserPlatform) Log(message string) {
@@ -111,12 +126,45 @@ func expandPixels(width int, height int, pixels []bool) (
 }
 
 func (b *BrowserPlatform) IsKeyDown(key string) bool {
-	keyState := js.Global().Get("keyState")
-	if keyState.IsUndefined() {
-		return false
-	}
+	return b.keyState[key]
+}
 
-	return keyState.Get(key).Bool()
+func (b *BrowserPlatform) Input() platform.Input {
+	return platform.Input{
+		Left:  b.IsKeyDown("ArrowLeft"),
+		Right: b.IsKeyDown("ArrowRight"),
+	}
+}
+
+func (b *BrowserPlatform) RegisterKeyboard() {
+	document := js.Global().Get("document")
+
+	keyDown := js.FuncOf(func(this js.Value, args []js.Value) any {
+		event := args[0]
+		key := event.Get("key").String()
+
+		if !supportedKeys[key] {
+			return nil
+		}
+
+		b.keyState[key] = true
+		return nil
+	})
+
+	keyUp := js.FuncOf(func(this js.Value, args []js.Value) any {
+		event := args[0]
+		key := event.Get("key").String()
+
+		if !supportedKeys[key] {
+			return nil
+		}
+
+		b.keyState[key] = false
+		return nil
+	})
+
+	document.Call("addEventListener", "keydown", keyDown)
+	document.Call("addEventListener", "keyup", keyUp)
 }
 
 var _ platform.Platform = (*BrowserPlatform)(nil)

@@ -14,11 +14,6 @@ type Engine struct {
 	hasFrame  bool
 }
 
-type Game interface {
-	Render(*Frame)
-	Update(dt float64)
-}
-
 func NewEngine(platform platform.Platform, game Game) *Engine {
 	return &Engine{
 		platform: platform,
@@ -57,7 +52,8 @@ func (e *Engine) frame(timestamp float64) {
 }
 
 func (e *Engine) Update(dt float64) {
-	e.game.Update(dt)
+	input := e.platform.Input()
+	e.game.Update(dt, input)
 }
 
 func (e *Engine) Render() {
