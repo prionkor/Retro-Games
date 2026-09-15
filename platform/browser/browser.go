@@ -28,8 +28,6 @@ func NewBrowserPlatform() *BrowserPlatform {
 	context := canvas.Call("getContext", "2d")
 	keyState := make(map[string]bool)
 
-	
-
 	b := &BrowserPlatform{
 		canvas:   canvas,
 		context:  context,
@@ -69,9 +67,9 @@ func (b *BrowserPlatform) Present(width int, height int, pixels []bool) {
 			data.SetIndex(i*4+2, 0)
 			data.SetIndex(i*4+3, 255)
 		} else {
-			data.SetIndex(i*4, 187)
-			data.SetIndex(i*4+1, 187)
-			data.SetIndex(i*4+2, 187)
+			data.SetIndex(i*4, 200)
+			data.SetIndex(i*4+1, 200)
+			data.SetIndex(i*4+2, 200)
 			data.SetIndex(i*4+3, 255)
 		}
 	}
