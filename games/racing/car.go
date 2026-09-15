@@ -1,14 +1,14 @@
 package racing
 
 type Car struct {
-	X      int
-	Y      int
+	X      float64
+	Y      float64
 	Width  int
 	Height int
 	Pixels []bool
 }
 
-func NewCar(x, y int) *Car {
+func NewCar(x, y float64) *Car {
 	return &Car{
 		X:      x,
 		Y:      y,
@@ -23,6 +23,6 @@ func NewCar(x, y int) *Car {
 	}
 }
 
-func (c *Car) MoveX(amount int) {
+func (c *Car) MoveX(amount float64) {
 	c.X += amount
 }

@@ -31,8 +31,8 @@ func (g *Game) Render(f *engine.Frame) {
 	)
 
 	f.Draw(
-		g.Car.X,
-		g.Car.Y,
+		int(g.Car.X),
+		int(g.Car.Y),
 		g.Car.Width,
 		g.Car.Height,
 		g.Car.Pixels,
@@ -46,18 +46,18 @@ func (g *Game) Update(dt float64, input platform.Input) {
 	maxX := g.Track.X + g.Track.Width() - 1 - g.Car.Width
 
 	if input.Left {
-		g.Car.MoveX(-3)
+		g.Car.MoveX(-1)
 
-		if g.Car.X < minX {
-			g.Car.X = minX
+		if g.Car.X < float64(minX) {
+			g.Car.X = float64(minX)
 		}
 	}
 
 	if input.Right {
-		g.Car.MoveX(3)
+		g.Car.MoveX(1)
 
-		if g.Car.X > maxX {
-			g.Car.X = maxX
+		if g.Car.X > float64(maxX) {
+			g.Car.X = float64(maxX)
 		}
 	}
 }
