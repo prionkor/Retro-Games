@@ -4,7 +4,7 @@ package main
 
 import (
 	"github.com/prionkor/retro-games/engine"
-	"github.com/prionkor/retro-games/games/racing"
+	"github.com/prionkor/retro-games/game/racing"
 	"github.com/prionkor/retro-games/platform/browser"
 )
 

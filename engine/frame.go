@@ -28,7 +28,18 @@ func (f *Frame) Draw(
 	pixels []bool,
 ) {
 	for py := range height {
+		frameY := y + py
+		if frameY < 0 || frameY >= f.Height {
+			continue
+		}
+
 		for px := range width {
+			frameX := x + px
+
+			if frameX < 0 || frameX >= f.Width {
+				continue
+			}
+
 			frameIndex := (y+py)*f.Width + (x + px)
 			pixelIndex := py*width + px
 

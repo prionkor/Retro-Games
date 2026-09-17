@@ -82,8 +82,9 @@ func expandPixels(width int, height int, pixels []bool) (
 	int,
 	int,
 ) {
-	physicalWidth := width*6 + (width - 1) + 2
-	physicalHeight := height*6 + (height - 1) + 2
+	size := 6
+	physicalWidth := width*size + (width - 1) + 2
+	physicalHeight := height*size + (height - 1) + 2
 
 	expandedPixels := make([]bool, physicalWidth*physicalHeight)
 
@@ -96,6 +97,18 @@ func expandPixels(width int, height int, pixels []bool) (
 		true, true, true, true, true, true,
 	}
 
+	// pattern2 := []bool{
+	// 	true, true, true, true, true, true, true, true, true,
+	// 	true, true, true, true, true, true, true, true, true,
+	// 	true, true, false, false, false, false, false, true, true,
+	// 	true, true, false, true, true, true, false, true, true,
+	// 	true, true, false, true, true, true, false, true, true,
+	// 	true, true, false, true, true, true, false, true, true,
+	// 	true, true, false, false, false, false, false, true, true,
+	// 	true, true, true, true, true, true, true, true, true,
+	// 	true, true, true, true, true, true, true, true, true,
+	// }
+
 	for i, pixel := range pixels {
 		if !pixel {
 			continue
@@ -104,12 +117,12 @@ func expandPixels(width int, height int, pixels []bool) (
 		x := i % width
 		y := i / width
 
-		cellX := 1 + x*7
-		cellY := 1 + y*7
+		cellX := 1 + x*(size+1)
+		cellY := 1 + y*(size+1)
 
-		for cy := 0; cy < 6; cy++ {
-			for cx := 0; cx < 6; cx++ {
-				patternIndex := cy*6 + cx
+		for cy := 0; cy < size; cy++ {
+			for cx := 0; cx < size; cx++ {
+				patternIndex := cy*size + cx
 
 				if !pattern[patternIndex] {
 					continue
