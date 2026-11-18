@@ -61,15 +61,15 @@ func (c *Curtain) Animate(dt float64) CurtainEvent {
 	return CurtainEventNone
 }
 
-func (c *Curtain) Draw(f *engine.Frame) {
+func (c *Curtain) Draw(part *engine.FramePart) {
 	if c.State == CurtainIdle {
 		return
 	}
 
 	startY := int(c.Y)
-	for y := startY; y < f.Height; y++ {
-		for x := 0; x < f.Width; x++ {
-			f.SetPixel(x, y, true)
+	for y := startY; y < part.Height; y++ {
+		for x := 0; x < part.Width; x++ {
+			part.SetPixel(x, y, true)
 		}
 	}
 }
