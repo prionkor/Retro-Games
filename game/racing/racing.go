@@ -16,6 +16,9 @@ type Game struct {
 	MaxEnemies int
 	gameOver   bool
 	Curtain    game.Curtain
+
+	GameArea *engine.FramePart
+	Overlay  *engine.FramePart
 }
 
 func NewGame() *Game {
@@ -27,13 +30,37 @@ func NewGame() *Game {
 		MaxEnemies: 5,
 		gameOver:   false,
 		Curtain:    *game.NewCurtain(40),
+
+		GameArea: &engine.FramePart{
+			X:      0,
+			Y:      0,
+			Width:  40,
+			Height: 60,
+			Pixels: make([]bool, 40*60),
+		},
+
+		Overlay: &engine.FramePart{
+			X:      0,
+			Y:      0,
+			Width:  40,
+			Height: 60,
+			Pixels: make([]bool, 40*60),
+		},
+	}
+}
+
+func (g *Game) Parts() []*engine.FramePart {
+	return []*engine.FramePart{
+		g.GameArea,
+		g.Overlay,
 	}
 }
 
 func (g *Game) Render(f *engine.Frame) {
-	f.Clear()
+	g.GameArea.Clear()
+	g.Overlay.Clear()
 
-	f.Draw(
+	g.GameArea.Draw(
 		g.Track.X,
 		g.Track.Y,
 		g.Track.Width(),
@@ -41,7 +68,7 @@ func (g *Game) Render(f *engine.Frame) {
 		g.Track.Pixels,
 	)
 
-	f.Draw(
+	g.GameArea.Draw(
 		int(g.Car.X),
 		int(g.Car.Y),
 		g.Car.Width,
@@ -50,7 +77,7 @@ func (g *Game) Render(f *engine.Frame) {
 	)
 
 	for _, enemy := range g.Enemies {
-		f.Draw(
+		g.GameArea.Draw(
 			int(enemy.X),
 			int(enemy.Y),
 			enemy.Width,
@@ -67,7 +94,7 @@ func (g *Game) Render(f *engine.Frame) {
 	g.removeOldEnemies()
 	g.addNewEnemy()
 
-	g.Curtain.Draw(f)
+	g.Curtain.Draw(g.Overlay)
 }
 
 func (g *Game) Update(dt float64, input platform.Input) {

@@ -1,56 +1,38 @@
 package engine
 
 type Frame struct {
-	Width  int
-	Height int
-	Pixels []bool
+	Width      int
+	Height     int
+	Pixels     []bool
+	FrameParts []*FramePart
 }
 
-func (f *Frame) SetPixel(x int, y int, value bool) {
-	if x < 0 || x >= f.Width || y < 0 || y >= f.Height {
-		return
-	}
+func (f *Frame) MergeFrameParts() {
+	// f.Clear()
+	for _, part := range f.FrameParts {
+		for y := 0; y < part.Height; y++ {
+			for x := 0; x < part.Width; x++ {
+				frameX := part.X + x
+				frameY := part.Y + y
 
-	f.Pixels[y*f.Width+x] = value
-}
+				if frameX < 0 || frameX >= f.Width ||
+					frameY < 0 || frameY >= f.Height {
+					continue
+				}
 
-func (f *Frame) FillRect(x, y, width, height int, value bool) {
-	for py := range height {
-		for px := range width {
-			f.SetPixel(x+px, y+py, value)
-		}
-	}
-}
+				partIndex := y*part.Width + x
+				frameIndex := frameY*f.Width + frameX
 
-func (f *Frame) Draw(
-	x, y int,
-	width, height int,
-	pixels []bool,
-) {
-	for py := range height {
-		frameY := y + py
-		if frameY < 0 || frameY >= f.Height {
-			continue
-		}
-
-		for px := range width {
-			frameX := x + px
-
-			if frameX < 0 || frameX >= f.Width {
-				continue
+				f.Pixels[frameIndex] =
+					f.Pixels[frameIndex] || part.Pixels[partIndex]
 			}
-
-			frameIndex := (y+py)*f.Width + (x + px)
-			pixelIndex := py*width + px
-
-			f.Pixels[frameIndex] =
-				f.Pixels[frameIndex] || pixels[pixelIndex]
 		}
 	}
 }
 
 func (f *Frame) Clear() {
-	for i := range f.Pixels {
-		f.Pixels[i] = false
+	clear(f.Pixels)
+	for _, part := range f.FrameParts {
+		part.Clear()
 	}
 }

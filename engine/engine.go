@@ -58,6 +58,10 @@ func (e *Engine) Update(dt float64) {
 }
 
 func (e *Engine) Render() {
+	e.Frame.Clear()
+
 	e.game.Render(&e.Frame)
+	e.Frame.MergeFrameParts()
+
 	e.platform.Present(e.Frame.Width, e.Frame.Height, e.Frame.Pixels)
 }
