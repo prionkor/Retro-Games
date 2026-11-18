@@ -22,9 +22,10 @@ func NewEngine(platform platform.Platform, game Game) *Engine {
 		game:     game,
 
 		Frame: Frame{
-			Width:  40,
-			Height: 60,
-			Pixels: make([]bool, 40*60),
+			Width:      40,
+			Height:     60,
+			Pixels:     make([]bool, 40*60),
+			FrameParts: game.Parts(),
 		},
 	}
 }
