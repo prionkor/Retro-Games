@@ -54,6 +54,11 @@ func (b *BrowserPlatform) RequestFrame(callback func(timestamp float64)) {
 
 	js.Global().Call("requestAnimationFrame", cb)
 }
+
+/*
+* Present renders the pixel buffer to the canvas.
+* The pixels are expanded using a predefined pattern for each "on" pixel.
+ */
 func (b *BrowserPlatform) Present(width int, height int, pixels []bool) {
 	pixels, width, height = expandPixels(width, height, pixels)
 
@@ -77,6 +82,11 @@ func (b *BrowserPlatform) Present(width int, height int, pixels []bool) {
 	b.context.Call("putImageData", imageData, 0, 0)
 }
 
+/*
+* expandPixels takes the logical pixel buffer and expands each "on" pixel
+* using a predefined pattern to create a higher-resolution physical pixel buffer
+* that can be directly mapped into the canvas or any device.
+ */
 func expandPixels(width int, height int, pixels []bool) (
 	[]bool,
 	int,
